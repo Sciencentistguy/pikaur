@@ -43,7 +43,7 @@ def filter_aur_results(
     return filtered_results
 
 
-def package_search_thread_aur(queries: List[str]) -> Dict[str, List[Any]]:
+def package_search_thread_aur(queries: List[str]) -> Dict[str, List[Any]]:  # pylint: disable=too-many-branches
     args = parse_args()
     result = {}
     if queries:
@@ -60,6 +60,13 @@ def package_search_thread_aur(queries: List[str]) -> Dict[str, List[Any]]:
                     if exc.error == "Too many package results.":
                         print_error(
                             _("AUR: Too many package results for '{query}'").format(
+                                query=query
+                            )
+                        )
+                        use_as_filters.append(query)
+                    if exc.error == "Query arg too small.":
+                        print_error(
+                            _("AUR: Query arg too small '{query}'").format(
                                 query=query
                             )
                         )
