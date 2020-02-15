@@ -627,6 +627,7 @@ class PackageBuild(DataType):
                         _("[i] ignore architecture"),
                         _("[d] delete build dir and try again"),
                         _("[e] edit PKGBUILD"),
+                        _("[g] import gpg key and retry"),
                         "-" * 24,
                         _("[s] skip building this package"),
                         _("[a] abort building all the packages"),
@@ -634,7 +635,7 @@ class PackageBuild(DataType):
                 )
                 answer = get_input(
                     prompt,
-                    _('r').upper() + _('p') + _('c') + _('i') + _('d') + _('e') +
+                    _('r').upper() + _('p') + _('c') + _('i') + _('d') + _('e') + _('g') +
                     _('s') + _('a')
                 )
 
@@ -665,6 +666,9 @@ class PackageBuild(DataType):
                         os.path.join(self.build_dir, 'PKGBUILD')
                     ]))
                     raise PkgbuildChanged()
+                continue
+            if answer == _('g'):
+                subprocess.run(["gpg", "--recv-keys", str(input("Paste gpg key: "))])
                 continue
             if answer == _("a"):
                 raise SysExit(125)
